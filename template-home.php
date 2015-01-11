@@ -80,7 +80,7 @@ Template Name: Home Template
             ?>  
            <li class="col-md-4 isotope-item <?php echo implode(" ", $typ_a); ?>" style="position: absolute; left: 0px; top: 0px; transform: translate3d(0px, 0px, 0px);">
               <div class="portfolio-item img-thumbnail">
-                <a href="portfolio-single-project.html" class="thumb-info">                  
+                <a href="<?php echo get_permalink( ); ?>" class="thumb-info">                  
                   <?php 
                     $default_attr = array(                      
                       'class' => "img-responsive"
@@ -103,6 +103,112 @@ Template Name: Home Template
   </div>
 </div>
 
+<div class="about" id="onas">
+  <div class="container">
+    <div class="heading2" style="text-align:left">
+      <h2 class="title">O Nas</h2>
+    </div>
+  </div>
+  <div class="">
+    <?php
+        $args=array(
+          'post_type' => 'about',
+          'post_status' => 'publish',
+          'posts_per_page' => -1,
+          'caller_get_posts'=> 1
+        );
+        $my_query = null;
+        $my_query = new WP_Query($args);
+        if( $my_query->have_posts() ) {
+          $it = 0;
+          while ($my_query->have_posts()) : $my_query->the_post(); ?>            
+              <div class="column-sm-4">
+                <?php 
+                    $default_attr = array(                      
+                      'class' => "img-responsive"
+                    );
+                    echo wp_get_attachment_image( get_post_meta(get_the_ID(), 'foto', true), array(640,427), 0, $default_attr );
+                  ?>
+                <div class="res">
+                  <h3><?php the_title(); ?></h3>
+                  <?php the_content(); ?>
+                  <a href="<?php echo get_post_meta(get_the_ID(), 'link', true) ?>">więcej ...</a>
+                </div>
+              </div>
+            <?php
+            $it++;
+          endwhile;
+        }
+        wp_reset_query();  
+      ?>     
+  </div>
+   <div class="container" id="team">
+    <div class="heading2" style="text-align:left">
+      <h2 class="title">Team</h2>
+    </div>
+    <div id="carousel-team" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+     <ol class="carousel-indicators">
+      <?php
+        $args=array(
+          'post_type' => 'teams',
+          'post_status' => 'publish',
+          'posts_per_page' => -1,
+          'caller_get_posts'=> 1
+        );
+        $my_query = null;
+        $my_query = new WP_Query($args);
+        if( $my_query->have_posts() ) {
+          $it = 0;
+          while ($my_query->have_posts()) : $my_query->the_post(); ?>                
+              <li data-target="#carousel-team" data-slide-to="<?php echo $it; ?>" class="<?php if($it == 0){ echo 'active'; }?>"><?php the_title(); ?></li>
+            <?php
+            $it++;
+          endwhile;
+        }
+        wp_reset_query();  
+      ?>  
+    </ol>
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+      <?php
+        $args=array(
+          'post_type' => 'teams',
+          'post_status' => 'publish',
+          'posts_per_page' => -1,
+          'caller_get_posts'=> 1
+        );
+        $my_query = null;
+        $my_query = new WP_Query($args);
+        if( $my_query->have_posts() ) {
+          $it = 0;
+          while ($my_query->have_posts()) : $my_query->the_post(); ?> 
+              <div class="item <?php if($it == 0){ echo 'active'; }?>" id="<?php echo $it; ?>">  
+                <div class="foto">
+                  <?php 
+                    $default_attr = array(                      
+                      'class' => ""
+                    );
+                    echo wp_get_attachment_image( get_post_meta(get_the_ID(), 'foto', true), array(447,447), 0, $default_attr );
+                  ?>
+                </div>
+                <div class="person-info">
+                  <h4 class="member-title">O <?php echo get_post_meta(get_the_ID(), 'name', true); ?></h4>
+                  <div class="member-content">
+                    <?php the_content(); ?>
+                  </div>
+                </div>
+              </div>
+            <?php
+            $it++;
+          endwhile;
+        }
+        wp_reset_query();  
+      ?> 
+      </div>
+    </div>
+</div>
+</div>
 
 <?php while (have_posts()) : the_post(); ?>
   <?php get_template_part('templates/page', 'header'); ?>
